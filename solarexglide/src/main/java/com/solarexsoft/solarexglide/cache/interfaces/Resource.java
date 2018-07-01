@@ -1,4 +1,4 @@
-package com.solarexsoft.solarexglide.cache;
+package com.solarexsoft.solarexglide.cache.interfaces;
 
 import android.graphics.Bitmap;
 
@@ -12,10 +12,10 @@ public class Resource {
     //引用计数
     private int acquired;
     private Key key;
-    private ResourceListener listener;
+    private ResourceReleaseListener listener;
 
     // 引用计数为0时，回调 onResourceReleased
-    public interface ResourceListener {
+    public interface ResourceReleaseListener {
         void onResourceReleased(Key key,Resource resource);
     }
 
@@ -27,7 +27,7 @@ public class Resource {
         return bitmap;
     }
 
-    public void setResourceListener(Key key,ResourceListener listener) {
+    public void setResourceReleaseListener(Key key,ResourceReleaseListener listener) {
         this.key = key;
         this.listener = listener;
     }

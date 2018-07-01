@@ -1,4 +1,4 @@
-package com.solarexsoft.solarexglide.cache;
+package com.solarexsoft.solarexglide.cache.interfaces;
 
 /**
  * Created by houruhou at 2018/6/30 22:58

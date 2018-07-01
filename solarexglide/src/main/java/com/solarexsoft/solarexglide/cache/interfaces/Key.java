@@ -1,4 +1,4 @@
-package com.solarexsoft.solarexglide.cache;
+package com.solarexsoft.solarexglide.cache.interfaces;
 
 import java.security.MessageDigest;
 
