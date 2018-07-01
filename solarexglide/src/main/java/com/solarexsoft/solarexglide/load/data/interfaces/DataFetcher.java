@@ -19,4 +19,6 @@ public interface DataFetcher<DATA> {
     void fetchData(DataFetcherCallback<DATA> callback);
 
     void cancel();
+
+    Class<DATA> getDataClass();
 }
