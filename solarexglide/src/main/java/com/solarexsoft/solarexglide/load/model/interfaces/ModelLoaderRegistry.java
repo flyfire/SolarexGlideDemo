@@ -67,7 +67,7 @@ public class ModelLoaderRegistry {
 
         public boolean handles(@NonNull Class<?> modelClass, @NonNull Class<?> dataClass) {
             // A.isAssignableFrom(B)
-            // A a = b; 是否成立
+            // A a = new B(); 是否成立
             return this.mModelClass.isAssignableFrom(modelClass) && this.mDataClass
                     .isAssignableFrom(dataClass);
         }
