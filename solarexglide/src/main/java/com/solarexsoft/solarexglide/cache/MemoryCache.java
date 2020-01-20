@@ -9,4 +9,18 @@ package com.solarexsoft.solarexglide.cache;
  */
 
 public interface MemoryCache {
+
+    Resource put(Key key, Resource resource);
+
+    Resource removeVoluntarily(Key key);
+
+    void setResourceRemoveListener(ResourceRemoveListener listener);
+
+    void clearMemory();
+
+    void trimMemory(int level);
+
+    interface ResourceRemoveListener {
+        void onResourceRemoved(Resource resource);
+    }
 }
