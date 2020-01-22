@@ -14,5 +14,5 @@ public interface Key {
 
     byte[] getKeyBytes();
 
-    void updateDiskCachKey(MessageDigest md);
+    void updateDiskCacheKey(MessageDigest md);
 }
