@@ -1,6 +1,7 @@
 package com.solarexsoft.solarexglide.load.engine;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -27,6 +28,8 @@ public class EngineJob implements DecodeJob.DecodeCallback {
     private static final int MSG_COMPLETE = 1;
     private static final int MSG_EXCEPTION = 2;
     private static final int MSG_CANCELLED = 3;
+
+    private static final Handler MAIN_THREAD_HANDLER = new Handler(Looper.getMainLooper(), new MainThreadCallback());
 
     public interface EngineJobListener {
         void onEngineJobComplete(EngineJob engineJob, Key key, Resource resource);
@@ -75,11 +78,12 @@ public class EngineJob implements DecodeJob.DecodeCallback {
     @Override
     public void onResourceReady(Resource resource) {
         this.resource = resource;
+        MAIN_THREAD_HANDLER.obtainMessage(MSG_COMPLETE,this).sendToTarget();
     }
 
     @Override
     public void onResourceLoadFailed(Throwable throwable) {
-
+        MAIN_THREAD_HANDLER.obtainMessage(MSG_EXCEPTION, this).sendToTarget();
     }
 
     private static class MainThreadCallback implements Handler.Callback {
@@ -89,15 +93,58 @@ public class EngineJob implements DecodeJob.DecodeCallback {
             EngineJob engineJob = (EngineJob) msg.obj;
             switch (msg.what) {
                 case MSG_COMPLETE:
+                    engineJob.handleResultOnMainThread();
                     break;
                 case MSG_EXCEPTION:
+                    engineJob.handleExceptionOnMainThread();
                     break;
                 case MSG_CANCELLED:
+                    engineJob.handleCancelledOnMainThread();
                     break;
                  default:
                      throw new IllegalStateException("Unrecognized message: " + msg.what);
             }
             return true;
+        }
+    }
+
+    private void handleCancelledOnMainThread() {
+        listener.onEngineJobCancelled(this, key);
+        release();
+    }
+
+    private void release() {
+        callbacks.clear();
+        key = null;
+        resource = null;
+        isCancelled = false;
+        decodeJob = null;
+    }
+
+    private void handleResultOnMainThread() {
+        if (isCancelled) {
+            resource.recycle();
+            release();
+            return;
+        }
+        resource.acquire();
+        listener.onEngineJobComplete(this, key, resource);
+        for (ResourceCallback callback : callbacks) {
+            resource.acquire();
+            callback.onResourceReady(resource);
+        }
+        resource.release();
+        release();
+    }
+
+    private void handleExceptionOnMainThread() {
+        if (isCancelled) {
+            release();
+            return;
+        }
+        listener.onEngineJobComplete(this, key, null);
+        for (ResourceCallback callback : callbacks) {
+            callback.onResourceReady(null);
         }
     }
 }
