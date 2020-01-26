@@ -152,6 +152,7 @@ public class DecodeJob implements Runnable, DataGenerator.DataGeneratorCallback 
 
     @Override
     public void onDataFetcherFailed(Key sourceKey, Exception e) {
-
+        Log.d(TAG, "加载失败，尝试使用下一个加载器: " + e.getMessage());
+        runGenerators();
     }
 }
