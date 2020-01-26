@@ -18,6 +18,7 @@ public class ResourceDecoderRegistry {
     public <T> void add(Class<T> dataClass, ResourceDecoder<T> decoder) {
         entries.add(new Entry<>(dataClass, decoder));
     }
+
     public <Data> List<ResourceDecoder<Data>> getDecoders(Class<Data> dataClass) {
         List<ResourceDecoder<Data>> decoders = new ArrayList<>();
         for (Entry<?> entry : entries) {
