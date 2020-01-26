@@ -27,7 +27,7 @@ public class SourceGenerator implements DataGenerator, DataFetcher.DataFetcherCa
     private List<ModelLoader.LoadData<?>> loadDataList;
     private ModelLoader.LoadData<?> loadData;
 
-    public SourceGenerator(DataGeneratorCallback dataGeneratorCallback, GlideContext glideContext) {
+    public SourceGenerator(DataGeneratorCallback dataGeneratorCallback, GlideContext glideContext, Object model) {
         this.dataGeneratorCallback = dataGeneratorCallback;
         this.glideContext = glideContext;
 

@@ -6,7 +6,9 @@ import com.solarexsoft.solarexglide.GlideContext;
 import com.solarexsoft.solarexglide.cache.DiskCache;
 import com.solarexsoft.solarexglide.cache.Key;
 import com.solarexsoft.solarexglide.cache.Resource;
+import com.solarexsoft.solarexglide.load.generator.DataCacheGenerator;
 import com.solarexsoft.solarexglide.load.generator.DataGenerator;
+import com.solarexsoft.solarexglide.load.generator.SourceGenerator;
 
 import java.io.IOException;
 
@@ -71,8 +73,54 @@ public class DecodeJob implements Runnable, DataGenerator.DataGeneratorCallback 
                 return;
             }
             // todo
+            stage = getNextStage(Stage.INITIALIZE);
+            currentGenerator = getNextGenerator();
+            runGenerators();
         } catch (Throwable t) {
             callback.onResourceLoadFailed(t);
+        }
+    }
+
+    private DataGenerator getNextGenerator() {
+        switch (stage) {
+            case DATA_CACHE:
+                Log.d(TAG, "使用磁盘缓存加载器");
+                return new DataCacheGenerator(model, this, glideContext, diskCache);
+            case SOURCE:
+                Log.d(TAG, "使用源资源加载器");
+                return new SourceGenerator(this, glideContext, model);
+            case FINISHED:
+                return null;
+            default:
+                throw new IllegalStateException("Unrecognized stage: " + stage);
+        }
+    }
+
+    private void runGenerators() {
+        boolean isStarted = false;
+        while (!isCancelled && currentGenerator != null && !isStarted) {
+            isStarted = currentGenerator.startNext();
+            if (isStarted) {
+                break;
+            }
+            stage = getNextStage(stage);
+            if (stage == Stage.FINISHED) {
+                Log.d(TAG, "状态结束,没有加载器能够加载对应数据");
+                break;
+            }
+            currentGenerator = getNextGenerator();
+        }
+
+        if ((stage == Stage.FINISHED || isCancelled) && !isStarted){
+            notifyFailed();
+        }
+    }
+
+    private void notifyFailed() {
+        Log.d(TAG, "加载失败");
+        if (!isCallbackNotified) {
+            isCallbackNotified = true;
+            callback.onResourceLoadFailed(new RuntimeException("Failed to load resource"));
         }
     }
 
@@ -93,7 +141,13 @@ public class DecodeJob implements Runnable, DataGenerator.DataGeneratorCallback 
 
     @Override
     public void onDataFetcherReady(Key sourceKey, Object data, DataSource dataSource) {
+        this.sourceKey = sourceKey;
+        Log.d(TAG, "加载成功，开始解码数据");
+        runLoadPath(data, dataSource);
+    }
 
+    private <Data> void runLoadPath(Data data, DataSource dataSource) {
+        // todo
     }
 
     @Override
