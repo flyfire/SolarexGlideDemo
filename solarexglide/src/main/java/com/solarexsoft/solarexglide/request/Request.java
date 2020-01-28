@@ -2,8 +2,7 @@ package com.solarexsoft.solarexglide.request;
 
 import android.graphics.drawable.Drawable;
 
-import com.solarexsoft.solarexglide.GlideContext;
-import com.solarexsoft.solarexglide.Target;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.cache.Resource;
 import com.solarexsoft.solarexglide.load.engine.Engine;
 

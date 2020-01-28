@@ -2,7 +2,7 @@ package com.solarexsoft.solarexglide.load.engine;
 
 import android.util.Log;
 
-import com.solarexsoft.solarexglide.GlideContext;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.cache.ActiveResources;
 import com.solarexsoft.solarexglide.cache.BitmapPool;
 import com.solarexsoft.solarexglide.cache.DiskCache;

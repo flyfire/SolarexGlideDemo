@@ -1,6 +1,6 @@
 package com.solarexsoft.solarexglide.request;
 
-import com.solarexsoft.solarexglide.GlideContext;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.lifecyclemanager.Lifecycle;
 import com.solarexsoft.solarexglide.lifecyclemanager.LifecycleListener;
 

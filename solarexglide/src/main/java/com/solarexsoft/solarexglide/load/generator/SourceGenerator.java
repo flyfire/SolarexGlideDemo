@@ -2,7 +2,7 @@ package com.solarexsoft.solarexglide.load.generator;
 
 import android.util.Log;
 
-import com.solarexsoft.solarexglide.GlideContext;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.load.modelloader.DataFetcher;
 import com.solarexsoft.solarexglide.load.modelloader.ModelLoader;
 

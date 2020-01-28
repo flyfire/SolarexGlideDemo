@@ -1,4 +1,4 @@
-package com.solarexsoft.solarexglide;
+package com.solarexsoft.solarexglide.request;
 
 import android.content.Context;
 import android.graphics.Bitmap;

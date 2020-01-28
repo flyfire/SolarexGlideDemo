@@ -26,6 +26,10 @@ public class LruArrayPool implements ArrayPool {
     // 溢出大小
     private static final int MAX_OVER_SIZE_MULTIPLE = 8;
 
+    public LruArrayPool() {
+        this(ARRAY_POOL_SIZE_BYTES);
+    }
+
     public LruArrayPool(int maxSize) {
         this.maxSize = maxSize;
         this.cache = new LruCache<Integer, byte[]>(maxSize){

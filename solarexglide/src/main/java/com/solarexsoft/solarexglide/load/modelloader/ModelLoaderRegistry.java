@@ -33,6 +33,16 @@ public class ModelLoaderRegistry {
         throw new RuntimeException("No match,model: " + modelClass.getName() + ",data:" + dataClass.getName());
     }
 
+    public <Model> List<ModelLoader<Model, ?>> getModelLoaders(Class<Model> modelClass) {
+        List<ModelLoader<Model, ?>> loaders = new ArrayList<>();
+        for (Entry<?, ?> entry : entries) {
+            if (entry.handles(modelClass)) {
+                loaders.add((ModelLoader<Model, ?>) entry.factory.build(this));
+            }
+        }
+        return loaders;
+    }
+
     private static class Entry<Model, Data> {
         Class<Model> modelClass;
         Class<Data> dataClass;

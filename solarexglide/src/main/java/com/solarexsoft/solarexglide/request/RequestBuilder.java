@@ -2,8 +2,7 @@ package com.solarexsoft.solarexglide.request;
 
 import android.widget.ImageView;
 
-import com.solarexsoft.solarexglide.GlideContext;
-import com.solarexsoft.solarexglide.Target;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 
 import java.io.File;
 

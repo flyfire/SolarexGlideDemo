@@ -9,7 +9,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.solarexsoft.solarexglide.GlideContext;
+import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.lifecyclemanager.ApplicationLifecycle;
 import com.solarexsoft.solarexglide.lifecyclemanager.SupportRequestManagerFragment;
 
@@ -46,7 +46,7 @@ public class RequestManagerRetriever implements Handler.Callback {
         return applicationRequestManager;
     }
 
-    protected RequestManager get(Context context) {
+    public RequestManager get(Context context) {
         if (!(context instanceof Application)) {
             if (context instanceof FragmentActivity) {
                 return get((FragmentActivity)context);
