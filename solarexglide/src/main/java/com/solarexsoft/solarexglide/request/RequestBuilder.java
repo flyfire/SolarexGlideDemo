@@ -23,7 +23,7 @@ public class RequestBuilder {
     public RequestBuilder(GlideContext glideContext, RequestManager requestManager) {
         this.glideContext = glideContext;
         this.requestManager = requestManager;
-        // todo request options
+        this.requestOptions = glideContext.getDefaultRequestOptions();
     }
 
     public RequestBuilder apply(RequestOptions options) {

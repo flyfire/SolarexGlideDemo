@@ -40,7 +40,7 @@ public class DataCacheGenerator implements DataGenerator, DataFetcher.DataFetche
         this.glideContext = glideContext;
         this.diskCache = diskCache;
 
-        // todo keys
+        keys = glideContext.getRegistry().getKeys(model);
     }
 
     @Override
@@ -57,8 +57,7 @@ public class DataCacheGenerator implements DataGenerator, DataFetcher.DataFetche
             if (cacheFile != null) {
                 sourceKey = sourceIdKey;
                 Log.d(TAG, "获得所有文件加载器");
-                // todo
-
+                modelLoaders = glideContext.getRegistry().getModelLoaders(cacheFile);
                 modelLoaderIndex = 0;
             }
         }
@@ -67,8 +66,7 @@ public class DataCacheGenerator implements DataGenerator, DataFetcher.DataFetche
             ModelLoader<File, ?> modelLoader = modelLoaders.get(modelLoaderIndex++);
             loadData = modelLoader.buildData(cacheFile);
             Log.d(TAG, "获得加载设置数据");
-            // todo
-            if (loadData != null) {
+            if (loadData != null && glideContext.getRegistry().hasLoadPath(loadData.fetcher.getDataClass())) {
                 Log.d(TAG, "加载设置数据输出数据对应能够查找有效的解码器路径，开始加载数据");
                 started = true;
                 loadData.fetcher.loadData(this);

@@ -1,5 +1,6 @@
 package com.solarexsoft.solarexglide.load.engine;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.solarexsoft.solarexglide.facade.GlideContext;
@@ -10,6 +11,9 @@ import com.solarexsoft.solarexglide.load.generator.DataCacheGenerator;
 import com.solarexsoft.solarexglide.load.generator.DataGenerator;
 import com.solarexsoft.solarexglide.load.generator.SourceGenerator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -72,7 +76,6 @@ public class DecodeJob implements Runnable, DataGenerator.DataGeneratorCallback 
                 callback.onResourceLoadFailed(new IOException("Canceled"));
                 return;
             }
-            // todo
             stage = getNextStage(Stage.INITIALIZE);
             currentGenerator = getNextGenerator();
             runGenerators();
@@ -147,7 +150,44 @@ public class DecodeJob implements Runnable, DataGenerator.DataGeneratorCallback 
     }
 
     private <Data> void runLoadPath(Data data, DataSource dataSource) {
-        // todo
+        LoadPath<Data> loadPath = glideContext.getRegistry().getLoadPath((Class<Data>) data.getClass());
+        Bitmap bitmap = loadPath.runLoad(data, width, height);
+        if (bitmap != null) {
+            Log.d(TAG, "解码成功回调");
+            notifyComplete(bitmap, dataSource);
+        } else {
+            Log.d(TAG, "解码失败，尝试使用下一个加载器");
+            runGenerators();
+        }
+    }
+
+    private void notifyComplete(final Bitmap bitmap, DataSource dataSource) {
+        if (dataSource == DataSource.REMOTE) {
+            diskCache.put(sourceKey, new DiskCache.Writer() {
+                @Override
+                public boolean write(File file) {
+                    FileOutputStream fileOutputStream = null;
+                    try {
+                        fileOutputStream = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
+                        return true;
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (fileOutputStream != null) {
+                            try {
+                                fileOutputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+        Resource resource = new Resource(bitmap);
+        callback.onResourceReady(resource);
     }
 
     @Override

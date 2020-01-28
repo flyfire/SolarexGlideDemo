@@ -31,24 +31,26 @@ public class SourceGenerator implements DataGenerator, DataFetcher.DataFetcherCa
         this.dataGeneratorCallback = dataGeneratorCallback;
         this.glideContext = glideContext;
 
-        // todo
+        loadDataList = glideContext.getRegistry().getLoadDatas(model);
     }
 
     @Override
     public boolean startNext() {
         boolean started = false;
-        // todo
-        while (!started) {
+        while (!started && hasNextModelLoader()) {
             loadData = loadDataList.get(loadDataListIndex++);
             Log.d(TAG, "获得加载设置数据");
-            // todo
-            if (loadData != null) {
+            if (loadData != null && glideContext.getRegistry().hasLoadPath(loadData.fetcher.getDataClass())) {
                 Log.d(TAG, "加载设置数据输出数据对应能够查找有效的解码器路径，开始加载数据");
                 started = true;
                 loadData.fetcher.loadData(this);
             }
         }
         return started;
+    }
+
+    private boolean hasNextModelLoader() {
+        return loadDataListIndex < loadDataList.size();
     }
 
     @Override

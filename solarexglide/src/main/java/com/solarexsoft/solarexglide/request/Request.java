@@ -1,6 +1,7 @@
 package com.solarexsoft.solarexglide.request;
 
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 
 import com.solarexsoft.solarexglide.facade.GlideContext;
 import com.solarexsoft.solarexglide.cache.Resource;
@@ -43,7 +44,7 @@ public class Request implements Target.SizeReadyCallback, ResourceCallback {
         this.model = model;
         this.requestOptions = requestOptions;
         this.target = target;
-        // todo engine
+        this.engine = glideContext.getEngine();
         status = Status.PENDING;
     }
 
@@ -129,8 +130,7 @@ public class Request implements Target.SizeReadyCallback, ResourceCallback {
     }
 
     private Drawable loadDrawable(int errorId) {
-        // todo glide context
-        return null;
+        return ResourcesCompat.getDrawable(glideContext.getContext().getResources(), errorId, glideContext.getContext().getTheme());
     }
 
     private void setErrorPlaceholder() {
