@@ -43,7 +43,7 @@ public class InputStreamBitmapDecoder implements ResourceDecoder<InputStream> {
         markInputStream.mark(0);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(source, null, options);
+        BitmapFactory.decodeStream(markInputStream, null, options);
         options.inJustDecodeBounds = false;
 
         int sourceWidth = options.outWidth;
