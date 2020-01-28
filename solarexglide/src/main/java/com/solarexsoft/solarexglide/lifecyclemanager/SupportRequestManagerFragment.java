@@ -2,6 +2,8 @@ package com.solarexsoft.solarexglide.lifecyclemanager;
 
 import android.support.v4.app.Fragment;
 
+import com.solarexsoft.solarexglide.request.RequestManager;
+
 /**
  * <pre>
  *    Author: houruhou
@@ -12,7 +14,7 @@ import android.support.v4.app.Fragment;
 
 public class SupportRequestManagerFragment extends Fragment {
     ActivityFragmentLifecycle lifecycle;
-    // todo request manager
+    RequestManager requestManager;
 
     public SupportRequestManagerFragment() {
         this.lifecycle = new ActivityFragmentLifecycle();
@@ -20,6 +22,14 @@ public class SupportRequestManagerFragment extends Fragment {
 
     public ActivityFragmentLifecycle getGlideLifecycle() {
         return lifecycle;
+    }
+
+    public RequestManager getRequestManager() {
+        return requestManager;
+    }
+
+    public void setRequestManager(RequestManager requestManager) {
+        this.requestManager = requestManager;
     }
 
     @Override
