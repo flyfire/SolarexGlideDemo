@@ -41,7 +41,7 @@ public class DiskLruCacheWrapper implements DiskCache {
     }
 
     public String getKeyString(Key key) {
-        key.updateDiskCachKey(md);
+        key.updateDiskCacheKey(md);
         return new String(Utils.sha256BytesToHex(md.digest()));
     }
 

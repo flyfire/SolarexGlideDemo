@@ -31,7 +31,7 @@ public class GlideBuilder {
     DiskCache diskCache;
     BitmapPool bitmapPool;
     ArrayPool arrayPool;
-    RequestOptions defaultRequestOptions;
+    RequestOptions defaultRequestOptions = new RequestOptions();
     ThreadPoolExecutor executor;
     Engine engine;
 

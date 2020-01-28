@@ -36,17 +36,14 @@ public class AvatarAdapter extends RecyclerView.Adapter<ItemAvatarViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemAvatarViewHolder holder, int position) {
-        String url = urls.get(position);
+        String url = urls.get(position % urls.size());
         holder.tv_position.setText(String.valueOf(position));
         Glide.with(activity).load(url).into(holder.iv_avatar);
     }
 
     @Override
     public int getItemCount() {
-        if (urls != null) {
-            return urls.size();
-        }
-        return 0;
+        return 1000;
     }
 
     public void setData(List<String> data) {
